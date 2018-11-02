@@ -3571,3 +3571,15 @@ describe("Extending katex by new fonts and symbols", function() {
         expect(katex.renderToString("۹۹^{۱۱}")).toMatchSnapshot();
     });
 });
+
+
+describe("API", () => {
+    it("should accept optional internal tree", () => {
+        const expression = "\\sin";
+        const tree = getParsed(expression);
+
+        expect(katex.renderToString(expression, null, tree)).toBe(katex.renderToString(expression));
+        expect(katex.__renderToDomTree(expression, null, tree).toMarkup()).toBe(katex.__renderToDomTree(expression).toMarkup());
+        expect(katex.__renderToHTMLTree(expression, null, tree).toMarkup()).toBe(katex.__renderToHTMLTree(expression).toMarkup());
+    });
+});
