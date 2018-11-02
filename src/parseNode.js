@@ -20,7 +20,8 @@ export type SymbolParseNode =
     ParseNode<"textord">;
 
 // Union of all possible `ParseNode<>` types.
-export type AnyParseNode = $Values<ParseNodeTypes>;
+export type AnyParseNode = $Values<ParseNodeTypes> &
+    {attributes: {[string]: string}};
 
 // Map from `NodeType` to the corresponding `ParseNode`.
 type ParseNodeTypes = {

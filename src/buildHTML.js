@@ -9,7 +9,7 @@
 import ParseError from "./ParseError";
 import Style from "./Style";
 import buildCommon from "./buildCommon";
-import {Anchor} from "./domTree";
+import {Anchor, Span, SymbolNode} from "./domTree";
 import utils, {assert} from "./utils";
 import {checkNodeType} from "./parseNode";
 import {spacings, tightSpacings} from "./spacingData";
@@ -266,6 +266,20 @@ export const buildGroup = function(
 
             groupNode.height *= multiplier;
             groupNode.depth *= multiplier;
+        }
+
+        if (group.attributes) {
+            if (groupNode instanceof DocumentFragment) {
+                throw Error("Got attributes for group \"" + group.type +
+                            "\" which does not create own Dom node");
+            } else {
+                for (const attrName in group.attributes) {
+                    if (group.attributes.hasOwnProperty(attrName)) {
+                        groupNode = (groupNode: Span<any> | Anchor | SymbolNode);
+                        groupNode.attributes[attrName] = group.attributes[attrName];
+                    }
+                }
+            }
         }
 
         return groupNode;

@@ -5,7 +5,7 @@
 /* global beforeAll: false */
 
 import buildMathML from "../src/buildMathML";
-import buildTree from "../src/buildTree";
+import {buildTree, buildHTMLTree} from "../src/buildTree";
 import katex from "../katex";
 import parseTree from "../src/parseTree";
 import Options from "../src/Options";
@@ -3438,5 +3438,95 @@ describe("Extending katex by new fonts and symbols", function() {
     });
     it("Add new font class to new extended symbols", () => {
         expect(katex.renderToString("۹۹^{۱۱}")).toMatchSnapshot();
+    });
+});
+
+describe("Putting nodes attributes to DOM", function() {
+    const settings = new Settings();
+
+    it("should work for \\sin", () => {
+        const expr = "\\sin";
+        const tree = getParsed(expr);
+        tree[0].attributes = {"katex-id": "1"};
+
+        const rootNode = buildHTMLTree(tree, expr, settings).toNode();
+
+        const sinNode = rootNode.querySelector('[katex-id="1"]');
+        expect(sinNode).toBeDefined();
+        expect(sinNode.textContent).toBe("sin");
+    });
+
+    it("should work for \\to", () => {
+        const expr = "\\to";
+        const tree = getParsed(expr);
+        tree[0].attributes = {"katex-id": "1"};
+
+        const rootNode = buildHTMLTree(tree, expr, settings).toNode();
+
+        const toNode = rootNode.querySelector('[katex-id="1"]');
+        expect(toNode).toBeDefined();
+        expect(toNode.textContent).toBe("→");
+    });
+
+    it("should work for fraction", () => {
+        const expr = "\\frac 1 2";
+        const tree = getParsed(expr);
+        tree[0].attributes = {
+            "katex-frac-id": "frac",
+        };
+        tree[0].numer.attributes = {
+            "katex-numer-id": "numer",
+        };
+        tree[0].denom.attributes = {
+            "katex-denom-id": "denom",
+        };
+
+        const rootNode = buildHTMLTree(tree, expr, settings).toNode();
+
+        const fracNode = rootNode.querySelector('[katex-frac-id="frac"]');
+        expect(fracNode).toBeDefined();
+        const numerNode = rootNode.querySelector('[katex-numer-id="numer"]');
+        expect(numerNode).toBeDefined();
+        expect(numerNode.textContent).toBe("1");
+        const denomNode = rootNode.querySelector('[katex-denom-id="denom"]');
+        expect(denomNode).toBeDefined();
+        expect(denomNode.textContent).toBe("2");
+
+        const markup = buildHTMLTree(tree, expr, settings).toMarkup();
+
+        expect(markup.match(/katex-frac-id="frac"/g).length).toBe(1);
+        expect(markup.match(/katex-numer-id="numer"/g).length).toBe(1);
+        expect(markup.match(/katex-denom-id="denom"/g).length).toBe(1);
+    });
+
+    it("should work for supsub", () => {
+        const expr = "\\lim_1^2";
+        const tree = getParsed(expr);
+        tree[0].base.attributes = {
+            "katex-base-id": "base",
+        };
+        tree[0].sup.attributes = {
+            "katex-sup-id": "sup",
+        };
+        tree[0].sub.attributes = {
+            "katex-sub-id": "sub",
+        };
+
+        const rootNode = buildHTMLTree(tree, expr, settings).toNode();
+
+        const baseNode = rootNode.querySelector('[katex-base-id="base"]');
+        expect(baseNode).toBeDefined();
+        const subNode = rootNode.querySelector('[katex-sub-id="sub"]');
+        expect(subNode).toBeDefined();
+        expect(subNode.textContent).toBe("1");
+        const supNode = rootNode.querySelector('[katex-sup-id="sup"]');
+        expect(supNode).toBeDefined();
+        expect(supNode.textContent).toBe("2");
+
+        const markup = buildHTMLTree(tree, expr, settings).toMarkup();
+
+        expect(markup.match(/katex-base-id="base"/g).length).toBe(1);
+        expect(markup.match(/katex-sub-id="sub"/g).length).toBe(1);
+        expect(markup.match(/katex-sup-id="sup"/g).length).toBe(1);
     });
 });

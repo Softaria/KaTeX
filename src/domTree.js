@@ -287,6 +287,7 @@ export class SymbolNode implements HtmlDomNode {
     maxFontSize: number;
     classes: string[];
     style: CssStyle;
+    attributes: { [string]: string };
 
     constructor(
         text: string,
@@ -307,6 +308,7 @@ export class SymbolNode implements HtmlDomNode {
         this.classes = classes || [];
         this.style = style || {};
         this.maxFontSize = 0;
+        this.attributes = {};
 
         // Mark text from non-Latin scripts with specific classes so that we
         // can specify which fonts to use.  This allows us to render these
@@ -345,6 +347,15 @@ export class SymbolNode implements HtmlDomNode {
         if (this.classes.length > 0) {
             span = span || document.createElement("span");
             span.className = createClass(this.classes);
+        }
+
+        if (this.attributes && this.attributes !== {}) {
+            span = span || document.createElement("span");
+            for (const attr in this.attributes) {
+                if (this.attributes.hasOwnProperty(attr)) {
+                    span.setAttribute(attr, this.attributes[attr]);
+                }
+            }
         }
 
         for (const style in this.style) {
