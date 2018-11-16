@@ -268,7 +268,7 @@ export const buildGroup = function(
             groupNode.depth *= multiplier;
         }
 
-        if (group.attributes) {
+        if (group.attributes && group.attributes !== {}) {
             if (groupNode instanceof DocumentFragment) {
                 throw Error("Got attributes for group \"" + group.type +
                             "\" which does not create own Dom node");
