@@ -8,7 +8,8 @@ import type {Token} from "./Token";
 import type {Measurement} from "./units";
 
 export type NodeType = $Keys<ParseNodeTypes>;
-export type ParseNode<TYPE: NodeType> = $ElementType<ParseNodeTypes, TYPE>;
+export type ParseNode<TYPE: NodeType> = $ElementType<ParseNodeTypes, TYPE> &
+    { attributes: { [string]: string } };
 
 // ParseNode's corresponding to Symbol `Group`s in symbols.js.
 export type SymbolParseNode =
