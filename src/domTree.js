@@ -12,7 +12,7 @@
  * target environments support class inheritance
  */
 import {scriptFromCodepoint} from "./unicodeScripts";
-import utils from "./utils";
+import utils, {isEmpty} from "./utils";
 import svgGeometry from "./svgGeometry";
 import type Options from "./Options";
 import {DocumentFragment} from "./tree";
@@ -412,7 +412,7 @@ export class SymbolNode implements HtmlDomNode {
             span.className = createClass(this.classes);
         }
 
-        if (this.attributes && this.attributes !== {}) {
+        if (!isEmpty(this.attributes)) {
             span = span || document.createElement("span");
             for (const attr in this.attributes) {
                 if (this.attributes.hasOwnProperty(attr)) {
@@ -468,6 +468,15 @@ export class SymbolNode implements HtmlDomNode {
         if (styles) {
             needsSpan = true;
             markup += " style=\"" + utils.escape(styles) + "\"";
+        }
+
+        if (this.attributes && !isEmpty(this.attributes)) {
+            needsSpan = true;
+            for (const attr in this.attributes) {
+                if (this.attributes.hasOwnProperty(attr)) {
+                    markup += " " + attr + "=\"" + this.attributes[attr] + "\"";
+                }
+            }
         }
 
         const escaped = utils.escape(this.text);

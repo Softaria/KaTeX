@@ -92,6 +92,10 @@ export const assert = function<T>(value: ?T): T {
 };
 
 export function isEmpty(o: Object): boolean {
+    if (!o) {
+        return true;
+    }
+
     for (const prop in o) {
         if (o.hasOwnProperty(prop)) {
             return false;
