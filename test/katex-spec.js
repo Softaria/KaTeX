@@ -3454,6 +3454,10 @@ describe("Putting nodes attributes to DOM", function() {
         const sinNode = rootNode.querySelector('[katex-id="1"]');
         expect(sinNode).toBeDefined();
         expect(sinNode.textContent).toBe("sin");
+
+        const markup = buildHTMLTree(tree, expr, settings).toMarkup();
+
+        expect(markup.match(/katex-id="1"/g).length).toBe(1);
     });
 
     it("should work for \\to", () => {
@@ -3466,6 +3470,10 @@ describe("Putting nodes attributes to DOM", function() {
         const toNode = rootNode.querySelector('[katex-id="1"]');
         expect(toNode).toBeDefined();
         expect(toNode.textContent).toBe("→");
+
+        const markup = buildHTMLTree(tree, expr, settings).toMarkup();
+
+        expect(markup.match(/katex-id="1"/g).length).toBe(1);
     });
 
     it("should work for fraction", () => {
