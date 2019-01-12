@@ -530,8 +530,9 @@ export class SymbolNode implements HtmlDomNode {
 
         return needSpan
             ? h(
-                'span' + this.classes.map(clazz => '.' + clazz).join(''),
+                'span',
                 {
+                    className: this.classes.join(' '),
                     style: {
                         marginRight: this.italic > 0 ?
                             this.italic + "em" :
