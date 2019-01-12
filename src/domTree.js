@@ -130,8 +130,9 @@ const toMarkup = function(tagName: string): string {
  */
 const toHyperNode = function(h: Hyperscript, tagName: string): VNode {
     return h(
-        tagName + this.classes.map(clazz => '.' + clazz).join(''),
+        tagName,
         {
+            className: this.classes.join(' '),
             style: this.style,
             attributes: this.attributes,
         },
