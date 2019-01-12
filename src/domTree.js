@@ -130,8 +130,9 @@ const toMarkup = function(tagName: string): string {
  */
 const toHyperNode = function(h: Hyperscript, tagName: string): VNode {
     return h(
-        tagName + this.classes.map(clazz => '.' + clazz).join(''),
+        tagName,
         {
+            className: this.classes.join(' '),
             style: this.style,
             attributes: this.attributes,
         },
@@ -475,8 +476,9 @@ export class SymbolNode implements HtmlDomNode {
 
         return needSpan
             ? h(
-                'span' + this.classes.map(clazz => '.' + clazz).join(''),
+                'span',
                 {
+                    className: this.classes.join(' '),
                     style: {
                         marginRight: this.italic > 0 ?
                             this.italic + "em" :
