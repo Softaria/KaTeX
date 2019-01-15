@@ -1418,7 +1418,7 @@ class SvgNode {
 
   toHyperNode(h) {
     const svgNS = "http://www.w3.org/2000/svg";
-    return h("path", {
+    return h("svg", {
       namespace: svgNS,
       attributes: this.attributes
     }, this.children.map(child => child.toHyperNode(h)));
@@ -1497,7 +1497,7 @@ class LineNode {
 
   toHyperNode(h) {
     const svgNS = "http://www.w3.org/2000/svg";
-    return h("path", {
+    return h("line", {
       namespace: svgNS,
       attributes: this.attributes
     });

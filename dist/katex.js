@@ -1445,7 +1445,7 @@ function () {
 
   _proto4.toHyperNode = function toHyperNode(h) {
     var svgNS = "http://www.w3.org/2000/svg";
-    return h("path", {
+    return h("svg", {
       namespace: svgNS,
       attributes: this.attributes
     }, this.children.map(function (child) {
@@ -1536,7 +1536,7 @@ function () {
 
   _proto6.toHyperNode = function toHyperNode(h) {
     var svgNS = "http://www.w3.org/2000/svg";
-    return h("path", {
+    return h("line", {
       namespace: svgNS,
       attributes: this.attributes
     });
