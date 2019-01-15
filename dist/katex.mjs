@@ -1458,7 +1458,9 @@ class PathNode {
     const svgNS = "http://www.w3.org/2000/svg";
     return h("path", {
       namespace: svgNS,
-      d: this.alternate || svgGeometry.path[this.pathName]
+      attributes: {
+        d: this.alternate || svgGeometry.path[this.pathName]
+      }
     });
   }
 
