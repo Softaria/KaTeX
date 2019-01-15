@@ -545,7 +545,7 @@ export class SvgNode implements VirtualNode {
 
     toHyperNode(h: Hyperscript): VNode | string {
         const svgNS = "http://www.w3.org/2000/svg";
-        return h("path", {
+        return h("svg", {
             namespace: svgNS,
             attributes: this.attributes,
         }, this.children.map(child => child.toHyperNode(h)));
@@ -628,7 +628,7 @@ export class LineNode implements VirtualNode {
 
     toHyperNode(h: Hyperscript): VNode {
         const svgNS = "http://www.w3.org/2000/svg";
-        return h("path", {
+        return h("line", {
             namespace: svgNS,
             attributes: this.attributes,
         });
