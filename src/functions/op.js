@@ -135,6 +135,10 @@ export const htmlBuilder: HtmlBuilderSupSub<"op"> = (grp, options) => {
         // in a new span so it is an inline, and works.
         base = buildCommon.makeSpan([], [base]);
 
+        // have to copy attributes manually because any previous "base"
+        // building loses it
+        base.attributes = group.attributes;
+
         let sub;
         let sup;
         // We manually have to handle the superscripts and subscripts. This,
