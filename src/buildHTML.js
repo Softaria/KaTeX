@@ -271,15 +271,16 @@ export const buildGroup = function(
             groupNode.depth *= multiplier;
         }
 
-        if (!isEmpty(group.attributes)) {
+        const groupAttributes = group.attributes;
+        if (!isEmpty(groupAttributes)) {
             if (groupNode instanceof DocumentFragment) {
                 throw Error("Got attributes for group \"" + group.type +
                             "\" which does not create own Dom node");
             } else {
-                for (const attrName in group.attributes) {
-                    if (group.attributes.hasOwnProperty(attrName)) {
+                for (const attrName in groupAttributes) {
+                    if (groupAttributes.hasOwnProperty(attrName)) {
                         groupNode = (groupNode: Span<any> | Anchor | SymbolNode);
-                        groupNode.attributes[attrName] = group.attributes[attrName];
+                        groupNode.attributes[attrName] = groupAttributes[attrName];
                     }
                 }
             }

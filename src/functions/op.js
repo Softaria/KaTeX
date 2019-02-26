@@ -137,7 +137,7 @@ export const htmlBuilder: HtmlBuilderSupSub<"op"> = (grp, options) => {
 
         // have to copy attributes manually because any previous "base"
         // building loses it
-        base.attributes = group.attributes;
+        base.attributes = group.attributes || {};
 
         let sub;
         let sup;
