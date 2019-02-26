@@ -29,6 +29,7 @@ defineFunction({
             type: "textord",
             mode: parser.mode,
             text: String.fromCharCode(code),
+            attributes: {},
         };
     },
 });

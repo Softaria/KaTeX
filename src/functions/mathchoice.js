@@ -32,6 +32,7 @@ defineFunction({
             text:         ordargument(args[1]),
             script:       ordargument(args[2]),
             scriptscript: ordargument(args[3]),
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {

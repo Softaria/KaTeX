@@ -34,6 +34,7 @@ defineFunction({
             label: funcName,
             body: args[0],
             below: optArgs[0],
+            attributes: {},
         };
     },
     // Flow is unable to correctly infer the type of `group`, even though it's

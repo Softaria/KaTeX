@@ -233,6 +233,7 @@ defineFunction({
             isStretchy: isStretchy,
             isShifty: isShifty,
             base: base,
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -261,6 +262,7 @@ defineFunction({
             isStretchy: false,
             isShifty: true,
             base: base,
+            attributes: {},
         };
     },
     htmlBuilder,

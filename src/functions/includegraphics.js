@@ -93,6 +93,7 @@ defineFunction({
             height: height,
             totalheight: totalheight,
             src: src,
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {

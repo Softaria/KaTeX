@@ -57,6 +57,7 @@ defineFunction({
             mode: parser.mode,
             body: ordargument(body),
             font: funcName,
+            attributes: {},
         };
     },
     htmlBuilder(group, options) {

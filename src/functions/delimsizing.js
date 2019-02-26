@@ -90,6 +90,7 @@ defineFunction({
             size: delimiterSizes[context.funcName].size,
             mclass: delimiterSizes[context.funcName].mclass,
             delim: delim.text,
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {
@@ -149,6 +150,7 @@ defineFunction({
             type: "leftright-right",
             mode: context.parser.mode,
             delim: checkDelimiter(args[0], context).text,
+            attributes: {},
         };
     },
 });
@@ -178,6 +180,7 @@ defineFunction({
             body,
             left: delim.text,
             right: right.delim,
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {
@@ -296,6 +299,7 @@ defineFunction({
             type: "middle",
             mode: context.parser.mode,
             delim: delim.text,
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {

@@ -43,6 +43,7 @@ defineFunction({
             newLine,
             newRow,
             size: size && assertNodeType(size, "size").value,
+            attributes: {},
         };
     },
 

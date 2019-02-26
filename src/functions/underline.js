@@ -18,6 +18,7 @@ defineFunction({
             type: "underline",
             mode: parser.mode,
             body: args[0],
+            attributes: {},
         };
     },
     htmlBuilder(group, options) {

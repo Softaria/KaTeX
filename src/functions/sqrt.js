@@ -23,6 +23,7 @@ defineFunction({
             mode: parser.mode,
             body,
             index,
+            attributes: {},
         };
     },
     htmlBuilder(group, options) {

@@ -88,6 +88,7 @@ function parseArray(
             type: "ordgroup",
             mode: parser.mode,
             body: cell,
+            attributes: {},
         };
         if (style) {
             cell = {
@@ -95,6 +96,7 @@ function parseArray(
                 mode: parser.mode,
                 style,
                 body: [cell],
+                attributes: {},
             };
         }
         row.push(cell);
@@ -138,6 +140,7 @@ function parseArray(
         rowGaps,
         hskipBeforeAndAfter,
         hLinesBeforeRow,
+        attributes: {},
     };
 }
 
@@ -398,6 +401,7 @@ const alignedHandler = function(context, args) {
         type: "ordgroup",
         mode: context.mode,
         body: [],
+        attributes: {},
     };
     const ordgroup = checkNodeType(args[0], "ordgroup");
     if (ordgroup) {
@@ -534,6 +538,7 @@ defineEnvironment({
             body: [res],
             left: delimiters[0],
             right: delimiters[1],
+            attributes: {},
         } : res;
     },
     htmlBuilder,
@@ -581,6 +586,7 @@ defineEnvironment({
             body: [res],
             left: "\\{",
             right: ".",
+            attributes: {},
         };
     },
     htmlBuilder,

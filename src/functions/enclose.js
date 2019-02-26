@@ -158,6 +158,7 @@ defineFunction({
             label: funcName,
             backgroundColor: color,
             body,
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -184,6 +185,7 @@ defineFunction({
             backgroundColor,
             borderColor,
             body,
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -204,6 +206,7 @@ defineFunction({
             mode: parser.mode,
             label: "\\fbox",
             body: args[0],
+            attributes: {},
         };
     },
 });
@@ -221,6 +224,7 @@ defineFunction({
             mode: parser.mode,
             label: funcName,
             body,
+            attributes: {},
         };
     },
     htmlBuilder,

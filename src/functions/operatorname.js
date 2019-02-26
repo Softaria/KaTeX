@@ -21,6 +21,7 @@ defineFunction({
             type: "operatorname",
             mode: parser.mode,
             body: ordargument(body),
+            attributes: {},
         };
     },
 
@@ -34,6 +35,7 @@ defineFunction({
                         type: "textord",
                         mode: child.mode,
                         text: childText,
+                        attributes: {},
                     };
                 } else {
                     return child;

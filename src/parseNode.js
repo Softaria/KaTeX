@@ -8,8 +8,7 @@ import type {Token} from "./Token";
 import type {Measurement} from "./units";
 
 export type NodeType = $Keys<ParseNodeTypes>;
-export type ParseNode<TYPE: NodeType> = $ElementType<ParseNodeTypes, TYPE> &
-    { attributes: { [string]: string } };
+export type ParseNode<TYPE: NodeType> = $ElementType<ParseNodeTypes, TYPE>;
 
 // ParseNode's corresponding to Symbol `Group`s in symbols.js.
 export type SymbolParseNode =
@@ -21,8 +20,7 @@ export type SymbolParseNode =
     ParseNode<"textord">;
 
 // Union of all possible `ParseNode<>` types.
-export type AnyParseNode = $Values<ParseNodeTypes> &
-    {attributes: {[string]: string}};
+export type AnyParseNode = $Values<ParseNodeTypes>;
 
 // Map from `NodeType` to the corresponding `ParseNode`.
 type ParseNodeTypes = {
@@ -37,6 +35,7 @@ type ParseNodeTypes = {
         body: AnyParseNode[][], // List of rows in the (2D) array.
         rowGaps: (?Measurement)[],
         hLinesBeforeRow: Array<boolean[]>,
+        attributes: {[name: string]: string},
     |},
     "color": {|
         type: "color",
@@ -44,18 +43,21 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         color: string,
         body: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "color-token": {|
         type: "color-token",
         mode: Mode,
         loc?: ?SourceLocation,
         color: string,
+        attributes: {[name: string]: string},
     |},
     "keyVals": {|
         type: "keyVals",
         mode: Mode,
         loc?: ?SourceLocation,
         keyVals: string,
+        attributes: {[name: string]: string},
     |},
     // To avoid requiring run-time type assertions, this more carefully captures
     // the requirements on the fields per the op.js htmlBuilder logic:
@@ -71,6 +73,7 @@ type ParseNodeTypes = {
         symbol: boolean,
         name: string,
         body?: void,
+        attributes: {[name: string]: string},
     |} | {|
         type: "op",
         mode: Mode,
@@ -81,6 +84,7 @@ type ParseNodeTypes = {
         symbol: false,  // If 'symbol' is true, `body` *must* be set.
         name?: void,
         body: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "ordgroup": {|
         type: "ordgroup",
@@ -88,12 +92,14 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         body: AnyParseNode[],
         semisimple?: boolean,
+        attributes: {[name: string]: string},
     |},
     "raw": {|
         type: "raw",
         mode: Mode,
         loc?: ?SourceLocation,
         string: string,
+        attributes: {[name: string]: string},
     |},
     "size": {|
         type: "size",
@@ -101,6 +107,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         value: Measurement,
         isBlank: boolean,
+        attributes: {[name: string]: string},
     |},
     "styling": {|
         type: "styling",
@@ -108,6 +115,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         style: StyleStr,
         body: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "supsub": {|
         type: "supsub",
@@ -116,6 +124,7 @@ type ParseNodeTypes = {
         base: ?AnyParseNode,
         sup?: ?AnyParseNode,
         sub?: ?AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "tag": {|
         type: "tag",
@@ -123,6 +132,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         body: AnyParseNode[],
         tag: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "text": {|
         type: "text",
@@ -130,12 +140,14 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         body: AnyParseNode[],
         font?: string,
+        attributes: {[name: string]: string},
     |},
     "url": {|
         type: "url",
         mode: Mode,
         loc?: ?SourceLocation,
         url: string,
+        attributes: {[name: string]: string},
     |},
     "verb": {|
         type: "verb",
@@ -143,6 +155,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         body: string,
         star: boolean,
+        attributes: {[name: string]: string},
     |},
     // From symbol groups, constructed in Parser.js via `symbols` lookup.
     // (Some of these have "-token" suffix to distinguish them from existing
@@ -153,24 +166,28 @@ type ParseNodeTypes = {
         mode: Mode,
         loc?: ?SourceLocation,
         text: string,
+        attributes: {[name: string]: string},
     |},
     "mathord": {|
         type: "mathord",
         mode: Mode,
         loc?: ?SourceLocation,
         text: string,
+        attributes: {[name: string]: string},
     |},
     "spacing": {|
         type: "spacing",
         mode: Mode,
         loc?: ?SourceLocation,
         text: string,
+        attributes: {[name: string]: string},
     |},
     "textord": {|
         type: "textord",
         mode: Mode,
         loc?: ?SourceLocation,
         text: string,
+        attributes: {[name: string]: string},
     |},
     // These "-token" types don't have corresponding HTML/MathML builders.
     "accent-token": {|
@@ -178,12 +195,14 @@ type ParseNodeTypes = {
         mode: Mode,
         loc?: ?SourceLocation,
         text: string,
+        attributes: {[name: string]: string},
     |},
     "op-token": {|
         type: "op-token",
         mode: Mode,
         loc?: ?SourceLocation,
         text: string,
+        attributes: {[name: string]: string},
     |},
     // From functions.js and functions/*.js. See also "color", "op", "styling",
     // and "text" above.
@@ -195,6 +214,7 @@ type ParseNodeTypes = {
         isStretchy?: boolean,
         isShifty?: boolean,
         base: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "accentUnder": {|
         type: "accentUnder",
@@ -204,6 +224,7 @@ type ParseNodeTypes = {
         isStretchy?: boolean,
         isShifty?: boolean,
         base: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "cr": {|
         type: "cr",
@@ -212,6 +233,7 @@ type ParseNodeTypes = {
         newRow: boolean,
         newLine: boolean,
         size: ?Measurement,
+        attributes: {[name: string]: string},
     |},
     "delimsizing": {|
         type: "delimsizing",
@@ -220,6 +242,7 @@ type ParseNodeTypes = {
         size: 1 | 2 | 3 | 4,
         mclass: "mopen" | "mclose" | "mrel" | "mord",
         delim: string,
+        attributes: {[name: string]: string},
     |},
     "enclose": {|
         type: "enclose",
@@ -229,6 +252,7 @@ type ParseNodeTypes = {
         backgroundColor?: string,
         borderColor?: string,
         body: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "environment": {|
         type: "environment",
@@ -236,6 +260,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         name: string,
         nameGroup: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "font": {|
         type: "font",
@@ -243,6 +268,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         font: string,
         body: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "genfrac": {|
         type: "genfrac",
@@ -256,6 +282,7 @@ type ParseNodeTypes = {
         rightDelim: ?string,
         size: StyleStr | "auto",
         barSize: Measurement | null,
+        attributes: {[name: string]: string},
     |},
     "horizBrace": {|
         type: "horizBrace",
@@ -264,6 +291,7 @@ type ParseNodeTypes = {
         label: string,
         isOver: boolean,
         base: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "href": {|
         type: "href",
@@ -271,6 +299,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         href: string,
         body: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "htmlmathml": {|
         type: "htmlmathml",
@@ -278,6 +307,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         html: AnyParseNode[],
         mathml: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "includegraphics": {|
         type: "includegraphics",
@@ -288,6 +318,7 @@ type ParseNodeTypes = {
         height: Measurement,
         totalheight: Measurement,
         src: string,
+        attributes: {[name: string]: string},
     |},
     "infix": {|
         type: "infix",
@@ -296,12 +327,14 @@ type ParseNodeTypes = {
         replaceWith: string,
         size?: Measurement,
         token: ?Token,
+        attributes: {[name: string]: string},
     |},
     "kern": {|
         type: "kern",
         mode: Mode,
         loc?: ?SourceLocation,
         dimension: Measurement,
+        attributes: {[name: string]: string},
     |},
     "lap": {|
         type: "lap",
@@ -309,6 +342,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         alignment: string,
         body: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "leftright": {|
         type: "leftright",
@@ -317,12 +351,14 @@ type ParseNodeTypes = {
         body: AnyParseNode[],
         left: string,
         right: string,
+        attributes: {[name: string]: string},
     |},
     "leftright-right": {|
         type: "leftright-right",
         mode: Mode,
         loc?: ?SourceLocation,
         delim: string,
+        attributes: {[name: string]: string},
     |},
     "mathchoice": {|
         type: "mathchoice",
@@ -332,12 +368,14 @@ type ParseNodeTypes = {
         text: AnyParseNode[],
         script: AnyParseNode[],
         scriptscript: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "middle": {|
         type: "middle",
         mode: Mode,
         loc?: ?SourceLocation,
         delim: string,
+        attributes: {[name: string]: string},
     |},
     "mclass": {|
         type: "mclass",
@@ -345,36 +383,42 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         mclass: string,
         body: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "operatorname": {|
         type: "operatorname",
         mode: Mode,
         loc?: ?SourceLocation,
         body: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "overline": {|
         type: "overline",
         mode: Mode,
         loc?: ?SourceLocation,
         body: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "phantom": {|
         type: "phantom",
         mode: Mode,
         loc?: ?SourceLocation,
         body: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "hphantom": {|
         type: "hphantom",
         mode: Mode,
         loc?: ?SourceLocation,
         body: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "vphantom": {|
         type: "vphantom",
         mode: Mode,
         loc?: ?SourceLocation,
         body: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "raisebox": {|
         type: "raisebox",
@@ -382,6 +426,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         dy: Measurement,
         body: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "rule": {|
         type: "rule",
@@ -390,6 +435,7 @@ type ParseNodeTypes = {
         shift: ?Measurement,
         width: Measurement,
         height: Measurement,
+        attributes: {[name: string]: string},
     |},
     "sizing": {|
         type: "sizing",
@@ -397,6 +443,7 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         size: number,
         body: AnyParseNode[],
+        attributes: {[name: string]: string},
     |},
     "smash": {|
         type: "smash",
@@ -405,6 +452,7 @@ type ParseNodeTypes = {
         body: AnyParseNode,
         smashHeight: boolean,
         smashDepth: boolean,
+        attributes: {[name: string]: string},
     |},
     "sqrt": {|
         type: "sqrt",
@@ -412,12 +460,14 @@ type ParseNodeTypes = {
         loc?: ?SourceLocation,
         body: AnyParseNode,
         index: ?AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "underline": {|
         type: "underline",
         mode: Mode,
         loc?: ?SourceLocation,
         body: AnyParseNode,
+        attributes: {[name: string]: string},
     |},
     "xArrow": {|
         type: "xArrow",
@@ -426,6 +476,7 @@ type ParseNodeTypes = {
         label: string,
         body: AnyParseNode,
         below: ?AnyParseNode,
+        attributes: {[name: string]: string},
     |},
 };
 

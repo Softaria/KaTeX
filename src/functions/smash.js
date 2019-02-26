@@ -51,6 +51,7 @@ defineFunction({
             body,
             smashHeight,
             smashDepth,
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {

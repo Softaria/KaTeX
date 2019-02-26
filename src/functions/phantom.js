@@ -19,6 +19,7 @@ defineFunction({
             type: "phantom",
             mode: parser.mode,
             body: ordargument(body),
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {
@@ -51,6 +52,7 @@ defineFunction({
             type: "hphantom",
             mode: parser.mode,
             body,
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {
@@ -95,6 +97,7 @@ defineFunction({
             type: "vphantom",
             mode: parser.mode,
             body,
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {

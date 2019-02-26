@@ -69,6 +69,7 @@ defineFunction({
             // Figure out what size to use based on the list of functions above
             size: sizeFuncs.indexOf(funcName) + 1,
             body,
+            attributes: {},
         };
     },
     htmlBuilder,

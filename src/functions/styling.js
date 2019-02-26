@@ -38,6 +38,7 @@ defineFunction({
             // the function name
             style,
             body,
+            attributes: {},
         };
     },
     htmlBuilder(group, options) {

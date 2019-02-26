@@ -131,6 +131,7 @@ defineFunction({
             label: funcName,
             isOver: /^\\over/.test(funcName),
             base: args[0],
+            attributes: {},
         };
     },
     htmlBuilder,

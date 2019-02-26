@@ -25,6 +25,7 @@ defineFunction({
             mode: parser.mode,
             dy: amount,
             body,
+            attributes: {},
         };
     },
     htmlBuilder(group, options) {
@@ -33,12 +34,14 @@ defineFunction({
             mode: group.mode,
             body: ordargument(group.body),
             font: "mathrm", // simulate \textrm
+            attributes: {},
         };
         const sizedText = {
             type: "sizing",
             mode: group.mode,
             body: [text],
             size: 6,                // simulate \normalsize
+            attributes: {},
         };
         const body = sizing.htmlBuilder(sizedText, options);
         const dy = calculateSize(group.dy, options);

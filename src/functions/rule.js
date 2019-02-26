@@ -23,6 +23,7 @@ defineFunction({
             shift: shift && assertNodeType(shift, "size").value,
             width: width.value,
             height: height.value,
+            attributes: {},
         };
     },
     htmlBuilder(group, options) {

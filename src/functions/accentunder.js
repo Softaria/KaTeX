@@ -26,6 +26,7 @@ defineFunction({
             mode: parser.mode,
             label: funcName,
             base: base,
+            attributes: {},
         };
     },
     htmlBuilder: (group: ParseNode<"accentUnder">, options) => {

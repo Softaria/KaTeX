@@ -308,6 +308,7 @@ defineFunction({
             limits: true,
             symbol: true,
             name: fName,
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -330,6 +331,7 @@ defineFunction({
             limits: false,
             symbol: false,
             body: ordargument(body),
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -369,6 +371,7 @@ defineFunction({
             limits: false,
             symbol: false,
             name: funcName,
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -391,6 +394,7 @@ defineFunction({
             limits: true,
             symbol: false,
             name: funcName,
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -418,6 +422,7 @@ defineFunction({
             limits: false,
             symbol: true,
             name: fName,
+            attributes: {},
         };
     },
     htmlBuilder,

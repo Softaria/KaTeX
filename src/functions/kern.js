@@ -43,6 +43,7 @@ defineFunction({
             type: "kern",
             mode: parser.mode,
             dimension: size.value,
+            attributes: {},
         };
     },
     htmlBuilder(group, options) {

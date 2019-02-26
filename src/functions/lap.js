@@ -21,6 +21,7 @@ defineFunction({
             mode: parser.mode,
             alignment: funcName.slice(5),
             body,
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {

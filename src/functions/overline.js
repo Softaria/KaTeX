@@ -18,6 +18,7 @@ defineFunction({
             type: "overline",
             mode: parser.mode,
             body,
+            attributes: {},
         };
     },
     htmlBuilder(group, options) {

@@ -5,16 +5,24 @@ exports[`A begin/end parser should grab \\arraystretch 1`] = `
   {
     "type": "array",
     "arraystretch": 1.5,
+    "attributes": {
+    },
     "body": [
       [
         {
           "type": "styling",
+          "attributes": {
+          },
           "body": [
             {
               "type": "ordgroup",
+              "attributes": {
+              },
               "body": [
                 {
                   "type": "mathord",
+                  "attributes": {
+                  },
                   "loc": {
                     "end": 37,
                     "lexer": {
@@ -35,12 +43,18 @@ exports[`A begin/end parser should grab \\arraystretch 1`] = `
         },
         {
           "type": "styling",
+          "attributes": {
+          },
           "body": [
             {
               "type": "ordgroup",
+              "attributes": {
+              },
               "body": [
                 {
                   "type": "mathord",
+                  "attributes": {
+                  },
                   "loc": {
                     "end": 39,
                     "lexer": {
@@ -63,12 +77,18 @@ exports[`A begin/end parser should grab \\arraystretch 1`] = `
       [
         {
           "type": "styling",
+          "attributes": {
+          },
           "body": [
             {
               "type": "ordgroup",
+              "attributes": {
+              },
               "body": [
                 {
                   "type": "mathord",
+                  "attributes": {
+                  },
                   "loc": {
                     "end": 42,
                     "lexer": {
@@ -89,12 +109,18 @@ exports[`A begin/end parser should grab \\arraystretch 1`] = `
         },
         {
           "type": "styling",
+          "attributes": {
+          },
           "body": [
             {
               "type": "ordgroup",
+              "attributes": {
+              },
               "body": [
                 {
                   "type": "mathord",
+                  "attributes": {
+                  },
                   "loc": {
                     "end": 44,
                     "lexer": {
@@ -592,14 +618,20 @@ exports[`A parse tree generator generates a tree 1`] = `
 [
   {
     "type": "supsub",
+    "attributes": {
+    },
     "base": {
       "type": "mathord",
+      "attributes": {
+      },
       "mode": "math",
       "text": "\\\\sigma"
     },
     "mode": "math",
     "sup": {
       "type": "textord",
+      "attributes": {
+      },
       "mode": "math",
       "text": "2"
     }
@@ -656,11 +688,17 @@ exports[`An implicit group parser within optional groups should work style comma
 [
   {
     "type": "sqrt",
+    "attributes": {
+    },
     "body": {
       "type": "ordgroup",
+      "attributes": {
+      },
       "body": [
         {
           "type": "mathord",
+          "attributes": {
+          },
           "mode": "math",
           "text": "x"
         }
@@ -669,12 +707,18 @@ exports[`An implicit group parser within optional groups should work style comma
     },
     "index": {
       "type": "ordgroup",
+      "attributes": {
+      },
       "body": [
         {
           "type": "styling",
+          "attributes": {
+          },
           "body": [
             {
               "type": "textord",
+              "attributes": {
+              },
               "mode": "math",
               "text": "3"
             }
@@ -694,11 +738,17 @@ exports[`An implicit group parser within optional groups should work with \\colo
 [
   {
     "type": "sqrt",
+    "attributes": {
+    },
     "body": {
       "type": "ordgroup",
+      "attributes": {
+      },
       "body": [
         {
           "type": "mathord",
+          "attributes": {
+          },
           "mode": "math",
           "text": "x"
         }
@@ -707,12 +757,18 @@ exports[`An implicit group parser within optional groups should work with \\colo
     },
     "index": {
       "type": "ordgroup",
+      "attributes": {
+      },
       "body": [
         {
           "type": "color",
+          "attributes": {
+          },
           "body": [
             {
               "type": "textord",
+              "attributes": {
+              },
               "mode": "math",
               "text": "3"
             }
@@ -732,11 +788,17 @@ exports[`An implicit group parser within optional groups should work with old fo
 [
   {
     "type": "sqrt",
+    "attributes": {
+    },
     "body": {
       "type": "ordgroup",
+      "attributes": {
+      },
       "body": [
         {
           "type": "mathord",
+          "attributes": {
+          },
           "mode": "math",
           "text": "x"
         }
@@ -745,14 +807,22 @@ exports[`An implicit group parser within optional groups should work with old fo
     },
     "index": {
       "type": "ordgroup",
+      "attributes": {
+      },
       "body": [
         {
           "type": "font",
+          "attributes": {
+          },
           "body": {
             "type": "ordgroup",
+            "attributes": {
+            },
             "body": [
               {
                 "type": "textord",
+                "attributes": {
+                },
                 "mode": "math",
                 "text": "3"
               }
@@ -774,11 +844,17 @@ exports[`An implicit group parser within optional groups should work with sizing
 [
   {
     "type": "sqrt",
+    "attributes": {
+    },
     "body": {
       "type": "ordgroup",
+      "attributes": {
+      },
       "body": [
         {
           "type": "mathord",
+          "attributes": {
+          },
           "mode": "math",
           "text": "x"
         }
@@ -787,12 +863,18 @@ exports[`An implicit group parser within optional groups should work with sizing
     },
     "index": {
       "type": "ordgroup",
+      "attributes": {
+      },
       "body": [
         {
           "type": "sizing",
+          "attributes": {
+          },
           "body": [
             {
               "type": "textord",
+              "attributes": {
+              },
               "mode": "math",
               "text": "3"
             }

@@ -215,13 +215,23 @@ export default class Parser {
             if (numerBody.length === 1 && numerBody[0].type === "ordgroup") {
                 numerNode = numerBody[0];
             } else {
-                numerNode = {type: "ordgroup", mode: this.mode, body: numerBody};
+                numerNode = {
+                    type: "ordgroup",
+                    mode: this.mode,
+                    body: numerBody,
+                    attributes: {},
+                };
             }
 
             if (denomBody.length === 1 && denomBody[0].type === "ordgroup") {
                 denomNode = denomBody[0];
             } else {
-                denomNode = {type: "ordgroup", mode: this.mode, body: denomBody};
+                denomNode = {
+                    type: "ordgroup",
+                    mode: this.mode,
+                    body: denomBody,
+                    attributes: {},
+                };
             }
 
             let node;
@@ -271,13 +281,19 @@ export default class Parser {
         const textordArray = [];
 
         for (let i = 0; i < text.length; i++) {
-            textordArray.push({type: "textord", mode: "text", text: text[i]});
+            textordArray.push({
+                type: "textord",
+                mode: "text",
+                text: text[i],
+                attributes: {},
+            });
         }
 
         const textNode = {
             type: "text",
             mode: this.mode,
             body: textordArray,
+            attributes: {},
         };
 
         const colorNode = {
@@ -285,6 +301,7 @@ export default class Parser {
             mode: this.mode,
             color: this.settings.errorColor,
             body: [textNode],
+            attributes: {},
         };
 
         this.consume();
@@ -345,7 +362,12 @@ export default class Parser {
                 if (superscript) {
                     throw new ParseError("Double superscript", lex);
                 }
-                const prime = {type: "textord", mode: this.mode, text: "\\prime"};
+                const prime = {
+                    type: "textord",
+                    mode: this.mode,
+                    text: "\\prime",
+                    attributes: {},
+                };
 
                 // Many primes can be grouped together, so we handle this here
                 const primes = [prime];
@@ -362,7 +384,12 @@ export default class Parser {
                     primes.push(this.handleSupSubscript("superscript"));
                 }
                 // Put everything into an ordgroup as the superscript
-                superscript = {type: "ordgroup", mode: this.mode, body: primes};
+                superscript = {
+                    type: "ordgroup",
+                    mode: this.mode,
+                    body: primes,
+                    attributes: {},
+                };
             } else {
                 // If it wasn't ^, _, or ', stop parsing super/subscripts
                 break;
@@ -379,6 +406,7 @@ export default class Parser {
                 base: base,
                 sup: superscript,
                 sub: subscript,
+                attributes: {},
             };
         } else {
             // Otherwise return the original body
@@ -540,6 +568,7 @@ export default class Parser {
                         type: "raw",
                         mode: "text",
                         string: token.text,
+                        attributes: {},
                     };
                 } else {
                     throw new ParseError("Expected raw group", this.nextToken);
@@ -666,6 +695,7 @@ export default class Parser {
             type: "color-token",
             mode: this.mode,
             color,
+            attributes: {},
         };
     }
 
@@ -707,6 +737,7 @@ export default class Parser {
             mode: this.mode,
             value: data,
             isBlank,
+            attributes: {},
         };
     }
 
@@ -735,6 +766,7 @@ export default class Parser {
             type: "url",
             mode: this.mode,
             url,
+            attributes: {},
         };
     }
 
@@ -788,6 +820,7 @@ export default class Parser {
                 // https://tex.stackexchange.com/questions/1930/when-should-one-
                 // use-begingroup-instead-of-bgroup
                 semisimple: text === "\\begingroup" || undefined,
+                attributes: {},
             };
         } else if (optional) {
             // Return nothing for an optional group
@@ -839,6 +872,7 @@ export default class Parser {
                         mode: "text",
                         loc: SourceLocation.range(a, group[i + 2]),
                         text: "---",
+                        attributes: {},
                     });
                     n -= 2;
                 } else {
@@ -847,6 +881,7 @@ export default class Parser {
                         mode: "text",
                         loc: SourceLocation.range(a, group[i + 1]),
                         text: "--",
+                        attributes: {},
                     });
                     n -= 1;
                 }
@@ -857,6 +892,7 @@ export default class Parser {
                     mode: "text",
                     loc: SourceLocation.range(a, group[i + 1]),
                     text: v + v,
+                    attributes: {},
                 });
                 n -= 1;
             }
@@ -890,6 +926,7 @@ export default class Parser {
                 mode: "text",
                 body: arg,
                 star,
+                attributes: {},
             };
         }
         // At this point, we should have a symbol, possibly with accents.
@@ -935,6 +972,7 @@ export default class Parser {
                     family,
                     loc,
                     text,
+                    attributes: {},
                 };
             } else {
                 // $FlowFixMe
@@ -943,6 +981,7 @@ export default class Parser {
                     mode: this.mode,
                     loc,
                     text,
+                    attributes: {},
                 };
             }
             symbol = s;
@@ -963,6 +1002,7 @@ export default class Parser {
                 mode: this.mode,
                 loc: SourceLocation.range(nucleus),
                 text,
+                attributes: {},
             };
         } else {
             return null;  // EOF, ^, _, {, }, etc.
@@ -989,6 +1029,7 @@ export default class Parser {
                     isStretchy: false,
                     isShifty: true,
                     base: symbol,
+                    attributes: {},
                 };
             }
         }

@@ -56,6 +56,7 @@ defineFunction({
             mode: parser.mode,
             font: func.slice(1),
             body,
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -83,8 +84,10 @@ defineFunction({
                     mode: parser.mode,
                     font: "boldsymbol",
                     body,
+                    attributes: {},
                 },
             ],
+            attributes: {},
         };
     },
 });
@@ -110,7 +113,9 @@ defineFunction({
                 type: "ordgroup",
                 mode: parser.mode,
                 body,
+                attributes: {},
             },
+            attributes: {},
         };
     },
     htmlBuilder,

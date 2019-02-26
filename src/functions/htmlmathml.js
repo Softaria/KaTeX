@@ -18,6 +18,7 @@ defineFunction({
             mode: parser.mode,
             html:   ordargument(args[0]),
             mathml: ordargument(args[1]),
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {

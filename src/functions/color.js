@@ -48,6 +48,7 @@ defineFunction({
             mode: parser.mode,
             color,
             body: ordargument(body),
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -84,6 +85,7 @@ defineFunction({
             mode: parser.mode,
             color: "katex-" + funcName.slice(1),
             body: ordargument(body),
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -110,6 +112,7 @@ defineFunction({
             mode: parser.mode,
             color,
             body,
+            attributes: {},
         };
     },
     htmlBuilder,

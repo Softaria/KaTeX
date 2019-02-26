@@ -57,6 +57,7 @@ defineFunction({
             mode: parser.mode,
             name: envName,
             nameGroup,
+            attributes: {},
         };
     },
 });

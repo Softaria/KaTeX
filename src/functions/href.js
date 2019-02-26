@@ -23,6 +23,7 @@ defineFunction({
             mode: parser.mode,
             href,
             body: ordargument(body),
+            attributes: {},
         };
     },
     htmlBuilder: (group, options) => {
@@ -59,6 +60,7 @@ defineFunction({
                 type: "textord",
                 mode: "text",
                 text: c,
+                attributes: {},
             });
         }
         const body = {
@@ -66,12 +68,14 @@ defineFunction({
             mode: parser.mode,
             font: "\\texttt",
             body: chars,
+            attributes: {},
         };
         return {
             type: "href",
             mode: parser.mode,
             href,
             body: ordargument(body),
+            attributes: {},
         };
     },
 });

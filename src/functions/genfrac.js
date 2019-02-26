@@ -293,6 +293,7 @@ defineFunction({
             rightDelim,
             size,
             barSize: null,
+            attributes: {},
         };
     },
 
@@ -335,6 +336,7 @@ defineFunction({
             mode: parser.mode,
             replaceWith,
             token,
+            attributes: {},
         };
     },
 });
@@ -412,6 +414,7 @@ defineFunction({
             leftDelim,
             rightDelim,
             size,
+            attributes: {},
         };
     },
 
@@ -435,6 +438,7 @@ defineFunction({
             replaceWith: "\\\\abovefrac",
             size: assertNodeType(args[0], "size").value,
             token,
+            attributes: {},
         };
     },
 });
@@ -463,6 +467,7 @@ defineFunction({
             leftDelim: null,
             rightDelim: null,
             size: "auto",
+            attributes: {},
         };
     },
 

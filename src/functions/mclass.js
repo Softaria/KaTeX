@@ -38,6 +38,7 @@ defineFunction({
             mode: parser.mode,
             mclass: "m" + funcName.substr(5),
             body: ordargument(body),
+            attributes: {},
         };
     },
     htmlBuilder,
@@ -71,6 +72,7 @@ defineFunction({
             mode: parser.mode,
             mclass: binrelClass(args[0]),
             body: [args[1]],
+            attributes: {},
         };
     },
 });
@@ -102,6 +104,7 @@ defineFunction({
             symbol: false,
             suppressBaseShift: funcName !== "\\stackrel",
             body: ordargument(baseArg),
+            attributes: {},
         };
 
         const supsub = {
@@ -110,6 +113,7 @@ defineFunction({
             base: baseOp,
             sup: funcName === "\\underset" ? null : shiftedArg,
             sub: funcName === "\\underset" ? shiftedArg : null,
+            attributes: {},
         };
 
         return {
@@ -117,6 +121,7 @@ defineFunction({
             mode: parser.mode,
             mclass,
             body: [supsub],
+            attributes: {},
         };
     },
     htmlBuilder,

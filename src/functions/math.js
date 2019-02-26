@@ -27,6 +27,7 @@ defineFunction({
             mode: parser.mode,
             style: "text",
             body,
+            attributes: {},
         };
     },
 });
