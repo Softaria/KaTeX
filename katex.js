@@ -41,9 +41,10 @@ let render = function(
     expression: string,
     baseNode: Node,
     options: SettingsOptions,
+    tree?: AnyParseNode[],
 ) {
     baseNode.textContent = "";
-    const node = renderToDomTree(expression, options).toNode();
+    const node = renderToDomTree(expression, options, tree).toNode();
     baseNode.appendChild(node);
 };
 
@@ -67,8 +68,9 @@ if (typeof document !== "undefined") {
 const renderToString = function(
     expression: string,
     options: SettingsOptions,
+    tree?: AnyParseNode[],
 ): string {
-    const markup = renderToDomTree(expression, options).toMarkup();
+    const markup = renderToDomTree(expression, options, tree).toMarkup();
     return markup;
 };
 
@@ -110,11 +112,12 @@ const renderError = function(
 const renderToDomTree = function(
     expression: string,
     options: SettingsOptions,
+    tree?: AnyParseNode[],
 ) {
     const settings = new Settings(options);
     try {
-        const tree = parseTree(expression, settings);
-        return buildTree(tree, expression, settings);
+        const parsedTree = tree || parseTree(expression, settings);
+        return buildTree(parsedTree, expression, settings);
     } catch (error) {
         return renderError(error, expression, settings);
     }
@@ -127,11 +130,12 @@ const renderToDomTree = function(
 const renderToHTMLTree = function(
     expression: string,
     options: SettingsOptions,
+    tree?: AnyParseNode[],
 ) {
     const settings = new Settings(options);
     try {
-        const tree = parseTree(expression, settings);
-        return buildHTMLTree(tree, expression, settings);
+        const parsedTree = tree || parseTree(expression, settings);
+        return buildHTMLTree(parsedTree, expression, settings);
     } catch (error) {
         return renderError(error, expression, settings);
     }
