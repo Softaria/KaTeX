@@ -5,11 +5,19 @@ import utils from "./utils";
 import type {CssStyle, HtmlDomNode} from "./domTree";
 import type {MathDomNode} from "./mathMLTree";
 
+export type VNode = Object;
+
+export type Hyperscript = (
+    selector: string,
+    properties?: { [string]: string | { [string]: string } },
+    children?: (VNode | string)[])
+    => VNode;
 
 // To ensure that all nodes have compatible signatures for these methods.
 export interface VirtualNode {
     toNode(): Node;
     toMarkup(): string;
+    toHyperNode(h: Hyperscript): VNode | string;
 }
 
 
@@ -62,6 +70,14 @@ export class DocumentFragment<ChildType: VirtualNode>
         }
 
         return markup;
+    }
+
+    /** Convert the fragment into a Hyperscript node. */
+    toHyperNode(h: Hyperscript): VNode | string {
+        return h(
+            "span",
+            undefined,
+            this.children.map(child => child.toHyperNode(h)));
     }
 
     /**

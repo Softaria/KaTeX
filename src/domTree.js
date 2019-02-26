@@ -17,7 +17,7 @@ import svgGeometry from "./svgGeometry";
 import type Options from "./Options";
 import {DocumentFragment} from "./tree";
 
-import type {VirtualNode} from "./tree";
+import type {Hyperscript, VirtualNode, VNode} from "./tree";
 
 
 /**
@@ -125,6 +125,20 @@ const toMarkup = function(tagName: string): string {
     return markup;
 };
 
+/**
+ * Convert into a hyperscript node
+ */
+const toHyperNode = function(h: Hyperscript, tagName: string): VNode {
+    return h(
+        tagName,
+        {
+            className: this.classes.join(' '),
+            style: this.style,
+            attributes: this.attributes,
+        },
+        this.children.map(child => child.toHyperNode(h)));
+};
+
 // Making the type below exact with all optional fields doesn't work due to
 // - https://github.com/facebook/flow/issues/4582
 // - https://github.com/facebook/flow/issues/5688
@@ -221,6 +235,10 @@ export class Span<ChildType: VirtualNode> implements HtmlDomNode {
     toMarkup(): string {
         return toMarkup.call(this, "span");
     }
+
+    toHyperNode(h: Hyperscript): VNode | string {
+        return toHyperNode.call(this, h, "span");
+    }
 }
 
 /**
@@ -261,6 +279,10 @@ export class Anchor implements HtmlDomNode {
 
     toMarkup(): string {
         return toMarkup.call(this, "a");
+    }
+
+    toHyperNode(h: Hyperscript): VNode | string {
+        return toHyperNode.call(this, h, "a");
     }
 }
 
@@ -426,6 +448,48 @@ export class SymbolNode implements HtmlDomNode {
             return escaped;
         }
     }
+
+    toHyperNode(h: Hyperscript): VNode | string {
+        let needSpan = false;
+
+        if (this.classes.length > 0) {
+            needSpan = true;
+        }
+
+        for (const style in this.style) {
+            if (this.style.hasOwnProperty(style)) {
+                needSpan = true;
+                break;
+            }
+        }
+
+        for (const attr in this.attributes) {
+            if (this.attributes.hasOwnProperty(attr)) {
+                needSpan = true;
+                break;
+            }
+        }
+
+        if (this.italic > 0) {
+            needSpan = true;
+        }
+
+        return needSpan
+            ? h(
+                'span',
+                {
+                    className: this.classes.join(' '),
+                    style: {
+                        marginRight: this.italic > 0 ?
+                            this.italic + "em" :
+                            undefined,
+                        ...this.style,
+                    },
+                    attributes: this.attributes,
+                },
+                [this.text])
+            : this.text;
+    }
 }
 
 /**
@@ -478,6 +542,14 @@ export class SvgNode implements VirtualNode {
         return markup;
 
     }
+
+    toHyperNode(h: Hyperscript): VNode | string {
+        const svgNS = "http://www.w3.org/2000/svg";
+        return h("svg", {
+            namespace: svgNS,
+            attributes: this.attributes,
+        }, this.children.map(child => child.toHyperNode(h)));
+    }
 }
 
 export class PathNode implements VirtualNode {
@@ -508,6 +580,16 @@ export class PathNode implements VirtualNode {
         } else {
             return `<path d='${svgGeometry.path[this.pathName]}'/>`;
         }
+    }
+
+    toHyperNode(h: Hyperscript): VNode {
+        const svgNS = "http://www.w3.org/2000/svg";
+        return h("path", {
+            namespace: svgNS,
+            attributes: {
+                d: this.alternate || svgGeometry.path[this.pathName],
+            },
+        });
     }
 }
 
@@ -544,6 +626,14 @@ export class LineNode implements VirtualNode {
         markup += "/>";
 
         return markup;
+    }
+
+    toHyperNode(h: Hyperscript): VNode {
+        const svgNS = "http://www.w3.org/2000/svg";
+        return h("line", {
+            namespace: svgNS,
+            attributes: this.attributes,
+        });
     }
 }
 
