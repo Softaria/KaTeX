@@ -1,3 +1,5 @@
+import _extends from '@babel/runtime/helpers/extends';
+
 /**
  * Lexing or parsing positional information for error reporting.
  * This object is immutable.
@@ -236,13 +238,27 @@ const assert = function assert(value) {
 
   return value;
 };
+function isEmpty(o) {
+  if (!o) {
+    return true;
+  }
+
+  for (const prop in o) {
+    if (o.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+
+  return true;
+}
 var utils = {
   contains,
   deflt,
   escape,
   hyphenate,
   getBaseElem,
-  isCharacterBox
+  isCharacterBox,
+  isEmpty
 };
 
 /* eslint no-console:0 */
@@ -926,6 +942,12 @@ class DocumentFragment {
 
     return markup;
   }
+  /** Convert the fragment into a Hyperscript node. */
+
+
+  toHyperNode(h) {
+    return h("span", undefined, this.children.map(child => child.toHyperNode(h)));
+  }
   /**
    * Converts the math node into a string, similar to innerText. Applies to
    * MathDomNode's only.
@@ -942,19 +964,6 @@ class DocumentFragment {
   }
 
 }
-
-/**
- * These objects store the data about the DOM nodes we create, as well as some
- * extra data. They can then be transformed into real DOM nodes with the
- * `toNode` function or HTML markup using `toMarkup`. They are useful for both
- * storing extra properties on the nodes, as well as providing a way to easily
- * work with the DOM.
- *
- * Similar functions for working with MathML nodes exist in mathMLTree.js.
- *
- * TODO: refactor `span` and `anchor` into common superclass when
- * target environments support class inheritance
- */
 
 /**
  * Create an HTML className based on a list of classes. In addition to joining
@@ -1054,6 +1063,18 @@ const toMarkup = function toMarkup(tagName) {
 
   markup += `</${tagName}>`;
   return markup;
+};
+/**
+ * Convert into a hyperscript node
+ */
+
+
+const toHyperNode = function toHyperNode(h, tagName) {
+  return h(tagName, {
+    className: this.classes.join(' '),
+    style: this.style,
+    attributes: this.attributes
+  }, this.children.map(child => child.toHyperNode(h)));
 }; // Making the type below exact with all optional fields doesn't work due to
 // - https://github.com/facebook/flow/issues/4582
 // - https://github.com/facebook/flow/issues/5688
@@ -1108,6 +1129,10 @@ class Span {
     return toMarkup.call(this, "span");
   }
 
+  toHyperNode(h) {
+    return toHyperNode.call(this, h, "span");
+  }
+
 }
 /**
  * This node represents an anchor (<a>) element with a hyperlink.  See `span`
@@ -1144,6 +1169,10 @@ class Anchor {
     return toMarkup.call(this, "a");
   }
 
+  toHyperNode(h) {
+    return toHyperNode.call(this, h, "a");
+  }
+
 }
 const iCombinations = {
   'î': '\u0131\u0302',
@@ -1169,6 +1198,7 @@ class SymbolNode {
     this.maxFontSize = void 0;
     this.classes = void 0;
     this.style = void 0;
+    this.attributes = void 0;
     this.text = text;
     this.height = height || 0;
     this.depth = depth || 0;
@@ -1177,7 +1207,8 @@ class SymbolNode {
     this.width = width || 0;
     this.classes = classes || [];
     this.style = style || {};
-    this.maxFontSize = 0; // Mark text from non-Latin scripts with specific classes so that we
+    this.maxFontSize = 0;
+    this.attributes = {}; // Mark text from non-Latin scripts with specific classes so that we
     // can specify which fonts to use.  This allows us to render these
     // characters with a serif font in situations where the browser would
     // either default to a sans serif or render a placeholder character.
@@ -1218,6 +1249,16 @@ class SymbolNode {
     if (this.classes.length > 0) {
       span = span || document.createElement("span");
       span.className = createClass(this.classes);
+    }
+
+    if (!isEmpty(this.attributes)) {
+      span = span || document.createElement("span");
+
+      for (const attr in this.attributes) {
+        if (this.attributes.hasOwnProperty(attr)) {
+          span.setAttribute(attr, this.attributes[attr]);
+        }
+      }
     }
 
     for (const style in this.style) {
@@ -1270,6 +1311,16 @@ class SymbolNode {
       markup += " style=\"" + utils.escape(styles) + "\"";
     }
 
+    if (this.attributes && !isEmpty(this.attributes)) {
+      needsSpan = true;
+
+      for (const attr in this.attributes) {
+        if (this.attributes.hasOwnProperty(attr)) {
+          markup += " " + attr + "=\"" + this.attributes[attr] + "\"";
+        }
+      }
+    }
+
     const escaped = utils.escape(this.text);
 
     if (needsSpan) {
@@ -1280,6 +1331,40 @@ class SymbolNode {
     } else {
       return escaped;
     }
+  }
+
+  toHyperNode(h) {
+    let needSpan = false;
+
+    if (this.classes.length > 0) {
+      needSpan = true;
+    }
+
+    for (const style in this.style) {
+      if (this.style.hasOwnProperty(style)) {
+        needSpan = true;
+        break;
+      }
+    }
+
+    for (const attr in this.attributes) {
+      if (this.attributes.hasOwnProperty(attr)) {
+        needSpan = true;
+        break;
+      }
+    }
+
+    if (this.italic > 0) {
+      needSpan = true;
+    }
+
+    return needSpan ? h('span', {
+      className: this.classes.join(' '),
+      style: _extends({
+        marginRight: this.italic > 0 ? this.italic + "em" : undefined
+      }, this.style),
+      attributes: this.attributes
+    }, [this.text]) : this.text;
   }
 
 }
@@ -1331,6 +1416,14 @@ class SvgNode {
     return markup;
   }
 
+  toHyperNode(h) {
+    const svgNS = "http://www.w3.org/2000/svg";
+    return h("svg", {
+      namespace: svgNS,
+      attributes: this.attributes
+    }, this.children.map(child => child.toHyperNode(h)));
+  }
+
 }
 class PathNode {
   constructor(pathName, alternate) {
@@ -1359,6 +1452,16 @@ class PathNode {
     } else {
       return `<path d='${svgGeometry.path[this.pathName]}'/>`;
     }
+  }
+
+  toHyperNode(h) {
+    const svgNS = "http://www.w3.org/2000/svg";
+    return h("path", {
+      namespace: svgNS,
+      attributes: {
+        d: this.alternate || svgGeometry.path[this.pathName]
+      }
+    });
   }
 
 }
@@ -1392,6 +1495,14 @@ class LineNode {
 
     markup += "/>";
     return markup;
+  }
+
+  toHyperNode(h) {
+    const svgNS = "http://www.w3.org/2000/svg";
+    return h("line", {
+      namespace: svgNS,
+      attributes: this.attributes
+    });
   }
 
 }
@@ -6467,6 +6578,19 @@ const buildGroup = function buildGroup(group, options, baseOptions) {
       groupNode.depth *= multiplier;
     }
 
+    if (!isEmpty(group.attributes)) {
+      if (groupNode instanceof DocumentFragment) {
+        throw Error("Got attributes for group \"" + group.type + "\" which does not create own Dom node");
+      } else {
+        for (const attrName in group.attributes) {
+          if (group.attributes.hasOwnProperty(attrName)) {
+            groupNode = groupNode;
+            groupNode.attributes[attrName] = group.attributes[attrName];
+          }
+        }
+      }
+    }
+
     return groupNode;
   } else {
     throw new ParseError("Got group of unknown type: '" + group.type + "'");
@@ -11172,7 +11296,10 @@ const htmlBuilder$8 = (grp, options) => {
   if (hasLimits) {
     // IE 8 clips \int if it is in a display: inline-block. We wrap it
     // in a new span so it is an inline, and works.
-    base = buildCommon.makeSpan([], [base]);
+    base = buildCommon.makeSpan([], [base]); // have to copy attributes manually because any previous "base"
+    // building loses it
+
+    base.attributes = group.attributes;
     let sub;
     let sup; // We manually have to handle the superscripts and subscripts. This,
     // aside from the kern calculations, is copied from supsub.
@@ -11389,7 +11516,39 @@ const singleCharIntegrals = {
 
 defineFunction({
   type: "op",
-  names: ["\\arcsin", "\\arccos", "\\arctan", "\\arctg", "\\arcctg", "\\arg", "\\ch", "\\cos", "\\cosec", "\\cosh", "\\cot", "\\cotg", "\\coth", "\\csc", "\\ctg", "\\cth", "\\deg", "\\dim", "\\exp", "\\hom", "\\ker", "\\lg", "\\ln", "\\log", "\\sec", "\\sin", "\\sinh", "\\sh", "\\tan", "\\tanh", "\\tg", "\\th"],
+  names: ["\\sin", "\\arcsin", "\\arsh"
+  /*Serbian*/
+  , "\\sinh", "\\sh"
+  /*Russian*/
+  , "\\arcsinh", "\\arcsh"
+  /*Russian*/
+  , "\\cos", "\\arccos", "\\arch"
+  /*Serbian*/
+  , "\\cosh", "\\ch"
+  /*Russian*/
+  , "\\arccosh", "\\tan", "\\tg"
+  /*Russian*/
+  , "\\tanh", "\\th"
+  /*Russian*/
+  , "\\arctan", "\\arctg"
+  /*Russian*/
+  , "\\arctanh", "\\arctgh"
+  /*Russian*/
+  , "\\cot", "\\ctg"
+  /*Russian*/
+  , "\\cotg"
+  /*Someone's*/
+  , "\\coth", "\\cth"
+  /*Russian*/
+  , "\\arccot", "\\arcctg"
+  /*Russian*/
+  , "\\arccoth", "\\arcctgh"
+  /*Russian*/
+  , "\\sec", "\\sech", "\\arcsec", "\\arcsech", "\\csc", "\\cosec"
+  /*Russian*/
+  , "\\csch", "\\cosech"
+  /*Russian*/
+  , "\\arccsc", "\\arccsch", "\\arg", "\\deg", "\\dim", "\\exp", "\\hom", "\\ker", "\\lg", "\\ln", "\\log"],
   props: {
     numArgs: 0
   },
@@ -15948,9 +16107,9 @@ const parseTree = function parseTree(toParse, settings) {
  * Parse and build an expression, and place that expression in the DOM node
  * given.
  */
-let render = function render(expression, baseNode, options) {
+let render = function render(expression, baseNode, options, tree) {
   baseNode.textContent = "";
-  const node = renderToDomTree(expression, options).toNode();
+  const node = renderToDomTree(expression, options, tree).toNode();
   baseNode.appendChild(node);
 }; // KaTeX's styles don't work properly in quirks mode. Print out an error, and
 // disable rendering.
@@ -15970,8 +16129,8 @@ if (typeof document !== "undefined") {
  */
 
 
-const renderToString = function renderToString(expression, options) {
-  const markup = renderToDomTree(expression, options).toMarkup();
+const renderToString = function renderToString(expression, options, tree) {
+  const markup = renderToDomTree(expression, options, tree).toMarkup();
   return markup;
 };
 /**
@@ -16006,12 +16165,12 @@ const renderError = function renderError(error, expression, options) {
  */
 
 
-const renderToDomTree = function renderToDomTree(expression, options) {
+const renderToDomTree = function renderToDomTree(expression, options, tree) {
   const settings = new Settings(options);
 
   try {
-    const tree = parseTree(expression, settings);
-    return buildTree(tree, expression, settings);
+    const parsedTree = tree || parseTree(expression, settings);
+    return buildTree(parsedTree, expression, settings);
   } catch (error) {
     return renderError(error, expression, settings);
   }
@@ -16022,15 +16181,21 @@ const renderToDomTree = function renderToDomTree(expression, options) {
  */
 
 
-const renderToHTMLTree = function renderToHTMLTree(expression, options) {
+const renderToHTMLTree = function renderToHTMLTree(expression, options, tree) {
   const settings = new Settings(options);
 
   try {
-    const tree = parseTree(expression, settings);
-    return buildHTMLTree(tree, expression, settings);
+    const parsedTree = tree || parseTree(expression, settings);
+    return buildHTMLTree(parsedTree, expression, settings);
   } catch (error) {
     return renderError(error, expression, settings);
   }
+};
+
+const symbolsClone = JSON.parse(JSON.stringify(symbols));
+
+const copySymbols = function copySymbols() {
+  return symbolsClone;
 };
 
 var katex = {
@@ -16116,7 +16281,16 @@ var katex = {
     SvgNode,
     PathNode,
     LineNode
-  }
+  },
+
+  /**
+   * Returns set of supported symbols in internal format.
+   *
+   * NOTE: This method is not currently recommended for public use.
+   * The internal tree representation is unstable and is very likely
+   * to change. Use at your own risk.
+   */
+  __symbols: copySymbols
 };
 
 export default katex;
