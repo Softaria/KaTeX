@@ -91,24 +91,48 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+function _extends() {
+  module.exports = _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+module.exports = _extends;
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ./src/katex.less
-var katex = __webpack_require__(0);
+var katex = __webpack_require__(1);
 
 // CONCATENATED MODULE: ./src/SourceLocation.js
 /**
@@ -362,13 +386,27 @@ var assert = function assert(value) {
 
   return value;
 };
+function isEmpty(o) {
+  if (!o) {
+    return true;
+  }
+
+  for (var prop in o) {
+    if (o.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+
+  return true;
+}
 /* harmony default export */ var utils = ({
   contains: contains,
   deflt: deflt,
   escape: utils_escape,
   hyphenate: hyphenate,
   getBaseElem: getBaseElem,
-  isCharacterBox: utils_isCharacterBox
+  isCharacterBox: utils_isCharacterBox,
+  isEmpty: isEmpty
 });
 // CONCATENATED MODULE: ./src/Settings.js
 /* eslint no-console:0 */
@@ -607,6 +645,10 @@ var _text = [D, Dc, T, Tc, T, Tc, T, Tc]; // We only export some of the styles.
   SCRIPT: Style_styles[S],
   SCRIPTSCRIPT: Style_styles[SS]
 });
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/extends.js
+var helpers_extends = __webpack_require__(0);
+var extends_default = /*#__PURE__*/__webpack_require__.n(helpers_extends);
+
 // CONCATENATED MODULE: ./src/unicodeScripts.js
 /*
  * This file defines the Unicode scripts and script families that we
@@ -877,6 +919,14 @@ function () {
 
     return markup;
   }
+  /** Convert the fragment into a Hyperscript node. */
+  ;
+
+  _proto.toHyperNode = function toHyperNode(h) {
+    return h("span", undefined, this.children.map(function (child) {
+      return child.toHyperNode(h);
+    }));
+  }
   /**
    * Converts the math node into a string, similar to innerText. Applies to
    * MathDomNode's only.
@@ -897,6 +947,8 @@ function () {
   return DocumentFragment;
 }();
 // CONCATENATED MODULE: ./src/domTree.js
+
+
 /**
  * These objects store the data about the DOM nodes we create, as well as some
  * extra data. They can then be transformed into real DOM nodes with the
@@ -1014,6 +1066,20 @@ var _toMarkup = function toMarkup(tagName) {
 
   markup += "</" + tagName + ">";
   return markup;
+};
+/**
+ * Convert into a hyperscript node
+ */
+
+
+var _toHyperNode = function toHyperNode(h, tagName) {
+  return h(tagName, {
+    className: this.classes.join(' '),
+    style: this.style,
+    attributes: this.attributes
+  }, this.children.map(function (child) {
+    return child.toHyperNode(h);
+  }));
 }; // Making the type below exact with all optional fields doesn't work due to
 // - https://github.com/facebook/flow/issues/4582
 // - https://github.com/facebook/flow/issues/5688
@@ -1072,6 +1138,10 @@ function () {
     return _toMarkup.call(this, "span");
   };
 
+  _proto.toHyperNode = function toHyperNode(h) {
+    return _toHyperNode.call(this, h, "span");
+  };
+
   return Span;
 }();
 /**
@@ -1111,6 +1181,10 @@ function () {
 
   _proto2.toMarkup = function toMarkup() {
     return _toMarkup.call(this, "a");
+  };
+
+  _proto2.toHyperNode = function toHyperNode(h) {
+    return _toHyperNode.call(this, h, "a");
   };
 
   return Anchor;
@@ -1205,6 +1279,7 @@ function () {
     this.maxFontSize = void 0;
     this.classes = void 0;
     this.style = void 0;
+    this.attributes = void 0;
     this.text = text;
     this.height = height || 0;
     this.depth = depth || 0;
@@ -1213,7 +1288,8 @@ function () {
     this.width = width || 0;
     this.classes = classes || [];
     this.style = style || {};
-    this.maxFontSize = 0; // Mark text from non-Latin scripts with specific classes so that we
+    this.maxFontSize = 0;
+    this.attributes = {}; // Mark text from non-Latin scripts with specific classes so that we
     // can specify which fonts to use.  This allows us to render these
     // characters with a serif font in situations where the browser would
     // either default to a sans serif or render a placeholder character.
@@ -1256,6 +1332,16 @@ function () {
     if (this.classes.length > 0) {
       span = span || document.createElement("span");
       span.className = createClass(this.classes);
+    }
+
+    if (!isEmpty(this.attributes)) {
+      span = span || document.createElement("span");
+
+      for (var attr in this.attributes) {
+        if (this.attributes.hasOwnProperty(attr)) {
+          span.setAttribute(attr, this.attributes[attr]);
+        }
+      }
     }
 
     for (var style in this.style) {
@@ -1308,6 +1394,16 @@ function () {
       markup += " style=\"" + utils.escape(styles) + "\"";
     }
 
+    if (this.attributes && !isEmpty(this.attributes)) {
+      needsSpan = true;
+
+      for (var attr in this.attributes) {
+        if (this.attributes.hasOwnProperty(attr)) {
+          markup += " " + attr + "=\"" + this.attributes[attr] + "\"";
+        }
+      }
+    }
+
     var escaped = utils.escape(this.text);
 
     if (needsSpan) {
@@ -1318,6 +1414,40 @@ function () {
     } else {
       return escaped;
     }
+  };
+
+  _proto4.toHyperNode = function toHyperNode(h) {
+    var needSpan = false;
+
+    if (this.classes.length > 0) {
+      needSpan = true;
+    }
+
+    for (var style in this.style) {
+      if (this.style.hasOwnProperty(style)) {
+        needSpan = true;
+        break;
+      }
+    }
+
+    for (var attr in this.attributes) {
+      if (this.attributes.hasOwnProperty(attr)) {
+        needSpan = true;
+        break;
+      }
+    }
+
+    if (this.italic > 0) {
+      needSpan = true;
+    }
+
+    return needSpan ? h('span', {
+      className: this.classes.join(' '),
+      style: extends_default()({
+        marginRight: this.italic > 0 ? this.italic + "em" : undefined
+      }, this.style),
+      attributes: this.attributes
+    }, [this.text]) : this.text;
   };
 
   return SymbolNode;
@@ -1374,6 +1504,16 @@ function () {
     return markup;
   };
 
+  _proto5.toHyperNode = function toHyperNode(h) {
+    var svgNS = "http://www.w3.org/2000/svg";
+    return h("svg", {
+      namespace: svgNS,
+      attributes: this.attributes
+    }, this.children.map(function (child) {
+      return child.toHyperNode(h);
+    }));
+  };
+
   return SvgNode;
 }();
 var domTree_PathNode =
@@ -1407,6 +1547,16 @@ function () {
     } else {
       return "<path d='" + svgGeometry.path[this.pathName] + "'/>";
     }
+  };
+
+  _proto6.toHyperNode = function toHyperNode(h) {
+    var svgNS = "http://www.w3.org/2000/svg";
+    return h("path", {
+      namespace: svgNS,
+      attributes: {
+        d: this.alternate || svgGeometry.path[this.pathName]
+      }
+    });
   };
 
   return PathNode;
@@ -1445,6 +1595,14 @@ function () {
 
     markup += "/>";
     return markup;
+  };
+
+  _proto7.toHyperNode = function toHyperNode(h) {
+    var svgNS = "http://www.w3.org/2000/svg";
+    return h("line", {
+      namespace: svgNS,
+      attributes: this.attributes
+    });
   };
 
   return LineNode;
@@ -6513,6 +6671,19 @@ var buildHTML_buildGroup = function buildGroup(group, options, baseOptions) {
       groupNode.depth *= multiplier;
     }
 
+    if (!isEmpty(group.attributes)) {
+      if (groupNode instanceof tree_DocumentFragment) {
+        throw Error("Got attributes for group \"" + group.type + "\" which does not create own Dom node");
+      } else {
+        for (var attrName in group.attributes) {
+          if (group.attributes.hasOwnProperty(attrName)) {
+            groupNode = groupNode;
+            groupNode.attributes[attrName] = group.attributes[attrName];
+          }
+        }
+      }
+    }
+
     return groupNode;
   } else {
     throw new src_ParseError("Got group of unknown type: '" + group.type + "'");
@@ -11514,7 +11685,10 @@ var op_htmlBuilder = function htmlBuilder(grp, options) {
   if (hasLimits) {
     // IE 8 clips \int if it is in a display: inline-block. We wrap it
     // in a new span so it is an inline, and works.
-    base = buildCommon.makeSpan([], [base]);
+    base = buildCommon.makeSpan([], [base]); // have to copy attributes manually because any previous "base"
+    // building loses it
+
+    base.attributes = group.attributes;
     var sub;
     var sup; // We manually have to handle the superscripts and subscripts. This,
     // aside from the kern calculations, is copied from supsub.
@@ -11744,7 +11918,39 @@ var singleCharIntegrals = {
 
 defineFunction({
   type: "op",
-  names: ["\\arcsin", "\\arccos", "\\arctan", "\\arctg", "\\arcctg", "\\arg", "\\ch", "\\cos", "\\cosec", "\\cosh", "\\cot", "\\cotg", "\\coth", "\\csc", "\\ctg", "\\cth", "\\deg", "\\dim", "\\exp", "\\hom", "\\ker", "\\lg", "\\ln", "\\log", "\\sec", "\\sin", "\\sinh", "\\sh", "\\tan", "\\tanh", "\\tg", "\\th"],
+  names: ["\\sin", "\\arcsin", "\\arsh"
+  /*Serbian*/
+  , "\\sinh", "\\sh"
+  /*Russian*/
+  , "\\arcsinh", "\\arcsh"
+  /*Russian*/
+  , "\\cos", "\\arccos", "\\arch"
+  /*Serbian*/
+  , "\\cosh", "\\ch"
+  /*Russian*/
+  , "\\arccosh", "\\tan", "\\tg"
+  /*Russian*/
+  , "\\tanh", "\\th"
+  /*Russian*/
+  , "\\arctan", "\\arctg"
+  /*Russian*/
+  , "\\arctanh", "\\arctgh"
+  /*Russian*/
+  , "\\cot", "\\ctg"
+  /*Russian*/
+  , "\\cotg"
+  /*Someone's*/
+  , "\\coth", "\\cth"
+  /*Russian*/
+  , "\\arccot", "\\arcctg"
+  /*Russian*/
+  , "\\arccoth", "\\arcctgh"
+  /*Russian*/
+  , "\\sec", "\\sech", "\\arcsec", "\\arcsech", "\\csc", "\\cosec"
+  /*Russian*/
+  , "\\csch", "\\cosech"
+  /*Russian*/
+  , "\\arccsc", "\\arccsch", "\\arg", "\\deg", "\\dim", "\\exp", "\\hom", "\\ker", "\\lg", "\\ln", "\\log"],
   props: {
     numArgs: 0
   },
@@ -16617,13 +16823,14 @@ var parseTree_parseTree = function parseTree(toParse, settings) {
 
 
 
+
 /**
  * Parse and build an expression, and place that expression in the DOM node
  * given.
  */
-var katex_render = function render(expression, baseNode, options) {
+var katex_render = function render(expression, baseNode, options, tree) {
   baseNode.textContent = "";
-  var node = katex_renderToDomTree(expression, options).toNode();
+  var node = katex_renderToDomTree(expression, options, tree).toNode();
   baseNode.appendChild(node);
 }; // KaTeX's styles don't work properly in quirks mode. Print out an error, and
 // disable rendering.
@@ -16643,8 +16850,8 @@ if (typeof document !== "undefined") {
  */
 
 
-var renderToString = function renderToString(expression, options) {
-  var markup = katex_renderToDomTree(expression, options).toMarkup();
+var renderToString = function renderToString(expression, options, tree) {
+  var markup = katex_renderToDomTree(expression, options, tree).toMarkup();
   return markup;
 };
 /**
@@ -16679,12 +16886,12 @@ var katex_renderError = function renderError(error, expression, options) {
  */
 
 
-var katex_renderToDomTree = function renderToDomTree(expression, options) {
+var katex_renderToDomTree = function renderToDomTree(expression, options, tree) {
   var settings = new src_Settings(options);
 
   try {
-    var tree = src_parseTree(expression, settings);
-    return buildTree_buildTree(tree, expression, settings);
+    var parsedTree = tree || src_parseTree(expression, settings);
+    return buildTree_buildTree(parsedTree, expression, settings);
   } catch (error) {
     return katex_renderError(error, expression, settings);
   }
@@ -16695,15 +16902,21 @@ var katex_renderToDomTree = function renderToDomTree(expression, options) {
  */
 
 
-var katex_renderToHTMLTree = function renderToHTMLTree(expression, options) {
+var katex_renderToHTMLTree = function renderToHTMLTree(expression, options, tree) {
   var settings = new src_Settings(options);
 
   try {
-    var tree = src_parseTree(expression, settings);
-    return buildTree_buildHTMLTree(tree, expression, settings);
+    var parsedTree = tree || src_parseTree(expression, settings);
+    return buildTree_buildHTMLTree(parsedTree, expression, settings);
   } catch (error) {
     return katex_renderError(error, expression, settings);
   }
+};
+
+var symbolsClone = JSON.parse(JSON.stringify(src_symbols));
+
+var copySymbols = function copySymbols() {
+  return symbolsClone;
 };
 
 /* harmony default export */ var katex_0 = ({
@@ -16789,7 +17002,16 @@ var katex_renderToHTMLTree = function renderToHTMLTree(expression, options) {
     SvgNode: SvgNode,
     PathNode: domTree_PathNode,
     LineNode: LineNode
-  }
+  },
+
+  /**
+   * Returns set of supported symbols in internal format.
+   *
+   * NOTE: This method is not currently recommended for public use.
+   * The internal tree representation is unstable and is very likely
+   * to change. Use at your own risk.
+   */
+  __symbols: copySymbols
 });
 // CONCATENATED MODULE: ./katex.webpack.js
 /**
