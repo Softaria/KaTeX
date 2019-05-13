@@ -29,6 +29,7 @@ import type {AnyParseNode} from "./src/parseNode";
 import {defineSymbol} from './src/symbols';
 import {defineMacro} from './src/macros';
 import {setFontMetrics} from './src/fontMetrics';
+import symbols from "./src/symbols";
 
 declare var __VERSION__: string;
 
@@ -136,6 +137,11 @@ const renderToHTMLTree = function(
     }
 };
 
+const symbolsClone = JSON.parse(JSON.stringify(symbols));
+const copySymbols = function() {
+    return symbolsClone;
+};
+
 export default {
     /**
      * Current KaTeX version
@@ -210,4 +216,12 @@ export default {
         PathNode,
         LineNode,
     },
+    /**
+     * Returns set of supported symbols in internal format.
+     *
+     * NOTE: This method is not currently recommended for public use.
+     * The internal tree representation is unstable and is very likely
+     * to change. Use at your own risk.
+     */
+    __symbols: copySymbols,
 };

@@ -15,6 +15,7 @@ import {
     strictSettings, nonstrictSettings, r,
     getBuilt, getParsed, stripPositions,
 } from "./helpers";
+import symbols from "../src/symbols";
 
 const defaultOptions = new Options({
     style: Style.TEXT,
@@ -3559,6 +3560,11 @@ describe("Internal __* interface", function() {
         const renderedSansMathML = rendered.replace(
             /<span class="katex-mathml">.*?<\/span>/, '');
         expect(tree.toMarkup()).toEqual(renderedSansMathML);
+    });
+
+    it("__symbols returns copy of actual symbols object", () => {
+        const copy = katex.__symbols();
+        expect(JSON.stringify(copy)).toEqual(JSON.stringify(symbols));
     });
 });
 
