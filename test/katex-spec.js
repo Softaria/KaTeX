@@ -3718,3 +3718,15 @@ describe("Putting nodes attributes to DOM", function() {
         expect(markup.match(/katex-base-id="base"/g).length).toBe(1);
     });
 });
+
+
+describe("API", () => {
+    it("should accept optional internal tree", () => {
+        const expression = "\\sin";
+        const tree = getParsed(expression);
+
+        expect(katex.renderToString(expression, null, tree)).toBe(katex.renderToString(expression));
+        expect(katex.__renderToDomTree(expression, null, tree).toMarkup()).toBe(katex.__renderToDomTree(expression).toMarkup());
+        expect(katex.__renderToHTMLTree(expression, null, tree).toMarkup()).toBe(katex.__renderToHTMLTree(expression).toMarkup());
+    });
+});
