@@ -10,7 +10,7 @@ import ParseError from "./ParseError";
 import Style from "./Style";
 import buildCommon from "./buildCommon";
 import {Anchor, Span, SymbolNode} from "./domTree";
-import utils from "./utils";
+import utils, {isEmpty} from "./utils";
 import {checkNodeType} from "./parseNode";
 import {spacings, tightSpacings} from "./spacingData";
 import {_htmlGroupBuilders as groupBuilders} from "./defineFunction";
@@ -271,7 +271,7 @@ export const buildGroup = function(
             groupNode.depth *= multiplier;
         }
 
-        if (group.attributes) {
+        if (!isEmpty(group.attributes)) {
             if (groupNode instanceof DocumentFragment) {
                 throw Error("Got attributes for group \"" + group.type +
                             "\" which does not create own Dom node");

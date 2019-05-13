@@ -3617,6 +3617,10 @@ describe("Putting nodes attributes to DOM", function() {
         const sinNode = rootNode.querySelector('[katex-id="1"]');
         expect(sinNode).toBeDefined();
         expect(sinNode.textContent).toBe("sin");
+
+        const markup = buildHTMLTree(tree, expr, settings).toMarkup();
+
+        expect(markup.match(/katex-id="1"/g).length).toBe(1);
     });
 
     it("should work for \\to", () => {
@@ -3629,6 +3633,10 @@ describe("Putting nodes attributes to DOM", function() {
         const toNode = rootNode.querySelector('[katex-id="1"]');
         expect(toNode).toBeDefined();
         expect(toNode.textContent).toBe("→");
+
+        const markup = buildHTMLTree(tree, expr, settings).toMarkup();
+
+        expect(markup.match(/katex-id="1"/g).length).toBe(1);
     });
 
     it("should work for fraction", () => {
@@ -3691,5 +3699,22 @@ describe("Putting nodes attributes to DOM", function() {
         expect(markup.match(/katex-base-id="base"/g).length).toBe(1);
         expect(markup.match(/katex-sub-id="sub"/g).length).toBe(1);
         expect(markup.match(/katex-sup-id="sup"/g).length).toBe(1);
+    });
+
+    it("should work for \\limits", () => {
+        const expr = "\\lim\\limits_1";
+        const tree = getParsed(expr);
+        tree[0].base.attributes = {
+            "katex-base-id": "base",
+        };
+
+        const rootNode = buildHTMLTree(tree, expr, settings).toNode();
+
+        const baseNode = rootNode.querySelector('[katex-base-id="base"]');
+        expect(baseNode).toBeDefined();
+
+        const markup = buildHTMLTree(tree, expr, settings).toMarkup();
+
+        expect(markup.match(/katex-base-id="base"/g).length).toBe(1);
     });
 });

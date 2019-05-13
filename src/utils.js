@@ -91,6 +91,19 @@ export const assert = function<T>(value: ?T): T {
     return value;
 };
 
+export function isEmpty(o: Object): boolean {
+    if (!o) {
+        return true;
+    }
+
+    for (const prop in o) {
+        if (o.hasOwnProperty(prop)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 export default {
     contains,
     deflt,
@@ -98,4 +111,5 @@ export default {
     hyphenate,
     getBaseElem,
     isCharacterBox,
+    isEmpty,
 };
