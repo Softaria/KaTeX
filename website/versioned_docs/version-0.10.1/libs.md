@@ -1,6 +1,7 @@
 ---
-id: libs
+id: version-0.10.1-libs
 title: Extensions & Libraries
+original_id: libs
 ---
 ## Extensions
 
@@ -20,9 +21,6 @@ These libraries are maintained by third-parties.
 
 ### iOS
 - [KaTeX-iOS](https://github.com/ianarawjo/KaTeX-iOS): iOS UIView that renders TeX expressions with KaTeX
-
-### Android
-- [KaTeXView](https://github.com/judemanutd/KaTeXView): An android library that uses Khan Academy KaTeX for TeX math rendering.
 
 ### React
 - [react-latex](https://github.com/zzish/react-latex): React component to render latex strings, based on KaTeX
@@ -45,6 +43,3 @@ you'll need to first convert AsciiMath into LaTeX input, then call KaTeX.
 ### Canvas LaTeX
 
 - [canvas-latex](https://github.com/CurriculumAssociates/canvas-latex): Renders mathematical expressions on HTML5's canvas element. Supports popular libraries like: CreateJS, and PIXI.
-
-### Web-Components
-- [katex-element](https://github.com/georges-gomes/katex-element): KaTeX wrapped in a custom element. Simply use `<katex-element>` in HTML - framework independent.
