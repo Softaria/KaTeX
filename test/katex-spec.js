@@ -1709,6 +1709,15 @@ describe("An HTML font tree-builder", function() {
         expect(markup).toContain("<span class=\"mord textit\">R</span>");
     });
 
+    it("should render \\textup{R} with the correct font", function() {
+        const markup1 = katex.renderToString(r`\textup{R}`);
+        expect(markup1).toContain("<span class=\"mord textup\">R</span>");
+        const markup2 = katex.renderToString(r`\textit{\textup{R}}`);
+        expect(markup2).toContain("<span class=\"mord textup\">R</span>");
+        const markup3 = katex.renderToString(r`\textup{\textit{R}}`);
+        expect(markup3).toContain("<span class=\"mord textit\">R</span>");
+    });
+
     it("should render \\text{R\\textit{S}T} with the correct fonts", function() {
         const markup = katex.renderToString(r`\text{R\textit{S}T}`);
         expect(markup).toContain("<span class=\"mord\">R</span>");
@@ -1719,6 +1728,15 @@ describe("An HTML font tree-builder", function() {
     it("should render \\textbf{R} with the correct font", function() {
         const markup = katex.renderToString(r`\textbf{R}`);
         expect(markup).toContain("<span class=\"mord textbf\">R</span>");
+    });
+
+    it("should render \\textmd{R} with the correct font", function() {
+        const markup1 = katex.renderToString(r`\textmd{R}`);
+        expect(markup1).toContain("<span class=\"mord textmd\">R</span>");
+        const markup2 = katex.renderToString(r`\textbf{\textmd{R}}`);
+        expect(markup2).toContain("<span class=\"mord textmd\">R</span>");
+        const markup3 = katex.renderToString(r`\textmd{\textbf{R}}`);
+        expect(markup3).toContain("<span class=\"mord textbf\">R</span>");
     });
 
     it("should render \\textsf{R} with the correct font", function() {
@@ -1970,7 +1988,8 @@ describe("A MathML font tree-builder", function() {
     });
 });
 
-describe("An includegraphics builder", function() {
+// Disabled until https://github.com/KaTeX/KaTeX/pull/1794 is merged.
+describe.skip("An includegraphics builder", function() {
     const img = "\\includegraphics[height=0.9em, totalheight=0.9em, width=0.9em, alt=KA logo]{https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png}";
     it("should not fail", function() {
         expect(img).toBuild();
@@ -2701,7 +2720,8 @@ describe("A raw text parser", function() {
         // Unicode combining character. So this is a test that the parser will catch a bad string.
         expect("\\includegraphics[\u030aheight=0.8em, totalheight=0.9em, width=0.9em]{" + "https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png}").not.toParse();
     });
-    it("should return null for a omitted optional string", function() {
+    // Disabled until https://github.com/KaTeX/KaTeX/pull/1794 is merged.
+    it.skip("should return null for a omitted optional string", function() {
         expect("\\includegraphics{https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png}").toParse();
     });
 });
@@ -2997,6 +3017,12 @@ describe("A macro expander", function() {
         expect("\\char'a").not.toParse();
         expect('\\char"g').not.toParse();
         expect('\\char"g').not.toParse();
+    });
+
+    it("should build Unicode private area characters", function() {
+        expect`\gvertneqq\lvertneqq\ngeqq\ngeqslant\nleqq`.toBuild();
+        expect`\nleqslant\nshortmid\nshortparallel\varsubsetneq`.toBuild();
+        expect`\varsubsetneqq\varsupsetneq\varsupsetneqq`.toBuild();
     });
 
     // TODO(edemaine): This doesn't work yet.  Parses like `\text text`,
@@ -3309,8 +3335,7 @@ describe("Unicode", function() {
     });
 
     it("should parse symbols", function() {
-        expect("ð").toParse();  // warns about lacking character metrics
-        expect("£¥ℂℍℑℎℓℕ℘ℙℚℜℝℤℲℵℶℷℸ⅁∀∁∂∃∇∞∠∡∢♠♡♢♣♭♮♯✓°¬‼⋮\u00B7\u00A9").toBuild(strictSettings);
+        expect("£¥ℂℍℑℎℓℕ℘ℙℚℜℝℤℲℵðℶℷℸ⅁∀∁∂∃∇∞∠∡∢♠♡♢♣♭♮♯✓°¬‼⋮\u00B7\u00A9").toBuild(strictSettings);
         expect("\\text{£¥ℂℍℎ\u00A9\u00AE\uFE0F}").toBuild(strictSettings);
     });
 
@@ -3340,6 +3365,7 @@ describe("Unicode", function() {
         expect`┌x┐ └x┘`.toBuild();
         expect("\u231Cx\u231D \u231Ex\u231F").toBuild();
         expect("\u27E6x\u27E7").toBuild();
+        expect("\\lBrace \\rBrace").toBuild();
     });
 
     it("should build some surrogate pairs", function() {
